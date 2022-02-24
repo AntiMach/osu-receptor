@@ -115,3 +115,8 @@ skin.txt
 However, doing this will get rid of every file needed to adjust the skin.
 You can always just delete `ffmpeg.exe` when distributing, since this file is automatically downloaded when needed.
 Any other files were either generated or added by yourself, of which you can delete at your own discretion.
+
+## Using the boilerplate
+If you want to start a skin from 0, you can make use of the boilerplate release here: https://github.com/AntiMach/osu-receptor/releases/tag/boilerplate
+
+Install it and enjoy!
