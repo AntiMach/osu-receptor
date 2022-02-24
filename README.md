@@ -38,15 +38,14 @@ Your skin should look something like this:
 ```
 SkinFolder/
     mania/
-        .git/
         src/
             ...
-        .gitignore
         README.md
         blank.png
         getffmpeg.py
         osu!receptor.py
         skin.txt
+        ...
     skin.ini
     ...
 ```
