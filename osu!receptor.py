@@ -107,7 +107,7 @@ class ReceptorStyle:
             while (line := fp.readline()) != "":
                 self.process_command(fp, line)
 
-        with open("skin.ini", "w") as fp:
+        with open("../skin.ini", "w") as fp:
             fp.write(self.skin)
 
     def process_command(self, fp, line: str):
