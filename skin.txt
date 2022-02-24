@@ -1,0 +1,43 @@
+// This is a comment, it doesn't get detected as a command
+
+// Customize this header to anything of your liking
+// This is just a barebones header that should work with any osu! skin
+header
+[General]
+Name: YourSkinNameHere
+Author: YourNameHere
+Version: latest
+header
+
+// This base is added to every mania key layout you create
+// It's basically a header for those layouts
+base
+UpsideDown: 0
+KeysUnderNotes: 1
+Hit300g: blank
+JudgementLine: 0
+SpecialStyle: 0
+ColourBarline: 0,0,0,0
+ColumnLineWidth: 0,0,0,0,0,0,0,0,0,0,0,0
+base
+
+// These define the type of images each component is made of
+// Check the README.md for a detailed explanation of how this works
+set note            variable
+set hold-head       redirect note
+set hold-body       static
+set hold-tail       static
+set receptor-up     static
+set receptor-down   static
+
+// These define the way each key layout is structured
+// Check the README.md for a detailed explanation of how this works
+keys 1 48 14 30 240 3
+keys 2 48 14 30 240 11
+keys 3 48 14 30 240 131
+keys 4 48 14 30 240 1221
+keys 5 48 14 30 240 12321
+keys 6 34 14 30 240 121121
+keys 7 34 14 30 240 1213121
+keys 8 34 14 30 240 12211221
+keys 9 34 14 30 240 122131221
