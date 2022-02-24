@@ -2,12 +2,12 @@
 
 // Customize this header to anything of your liking
 // This is just a barebones header that should work with any osu! skin
-header
+config
 [General]
 Name: YourSkinNameHere
 Author: YourNameHere
 Version: latest
-header
+config
 
 // This base is added to every mania key layout you create
 // It's basically a header for those layouts
@@ -36,7 +36,7 @@ keys 2 48 14 30 240 11
 keys 3 48 14 30 240 131
 keys 4 48 14 30 240 1221
 keys 5 48 14 30 240 12321
-keys 6 34 14 30 240 121121
-keys 7 34 14 30 240 1213121
-keys 8 34 14 30 240 12211221
-keys 9 34 14 30 240 122131221
+keys 6 40 10 30 240 121121
+keys 7 40 10 30 240 1213121
+keys 8 40 10 30 240 12211221
+keys 9 40 10 30 240 122131221

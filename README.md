@@ -54,14 +54,14 @@ Note: the `mania` folder can have any name.
 ## skin.txt
 This is a sequence of commands for creating skin elements automatically, including scaling images and what not.
 
-## The <b>skin.ini</b> header
+## Adding <b>skin.ini</b> config
 ```
-header
+config
 ... skin.ini config stuff ...
-header
+config
 ```
-- Will always add this bit of text at the beginning of the generated <b>skin.ini</b>.
-- Make sure to encase the entire header between those two header lines
+- Will add this bit of text to the generated <b>skin.ini</b>.
+- Make sure to encase the entire text between those two config lines
 
 ## Generic mania skin settings
 ```
@@ -70,7 +70,7 @@ base [hide marvelous]
 base
 ```
 - Will always add this bit of text at the beginning of each generated key layout.
-- Make sure to encase the entire base between those two base lines
+- Make sure to encase the entire text between those two base lines
 - If `[hide marvelous]` is `1`, it will hide the marvelous judgement when playing.
 
 ## Set component types

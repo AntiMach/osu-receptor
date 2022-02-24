@@ -4,6 +4,17 @@ from pathlib import Path
 from getffmpeg import main as get_ffmpeg
 
 
+class OsuReceptorError(Exception): ...
+
+class UnknownCommandError(OsuReceptorError):
+    def __init__(self, cmd, line) -> None:
+        super().__init__(f"Unknown command '{cmd}' in line {line}")
+
+class InvalidArgumentError(OsuReceptorError):
+    def __init__(self, arg, line) -> None:
+        super().__init__(f"Invalid value for argument [{arg}] in line {line}")
+
+
 class SourceBuilder:
     MAGIC = 1.6
 
@@ -102,9 +113,11 @@ class ReceptorStyle:
         self.components: dict[str, TransformedComponent] = {}
         self.skin = ""
         self.base = ""
+        self.line_nr = 0
 
         with open("skin.txt", "r") as fp:
             while (line := fp.readline()) != "":
+                self.line_nr += 1
                 self.process_command(fp, line)
 
         with open("../skin.ini", "w") as fp:
@@ -116,45 +129,65 @@ class ReceptorStyle:
 
         command, *args = line.lower().split()
         
-        if command == "header":
-            self.add_header(fp)
+        if command == "config":
+            self.add_config(fp)
         elif command == "base":
-            self.add_base(fp, *args)
+            self.set_base(fp, *args)
         elif command == "set":
             self.set(*args)
         elif command == "keys":
             self.keys(*args)
+        else:
+            raise UnknownCommandError(command, self.line_nr)
 
-    def add_header(self, fp):
-        while (line := fp.readline().strip()) != "header":
+    def int_arg(self, name, value) -> int:
+        try:
+            return int(value)
+        except ValueError:
+            raise InvalidArgumentError(name, self.line_nr)
+
+    def add_config(self, fp):
+        while (line := fp.readline().strip()) != "config":
             self.skin += line + "\n"
+            self.line_nr += 1
+
+        self.line_nr += 1
 
         self.skin += "\n"
             
-    def add_base(self, fp, hide):
-        hide = int(hide)
+    def set_base(self, fp, hide):
+        hide = self.int_arg("hide marvelous", hide)
 
         while (line := fp.readline().strip()) != "base":
             self.base += line + "\n"
+            self.line_nr += 1
+        
+        self.line_nr += 1
 
         if hide:
             self.base += f"Hit300g: {self.root}\\blank\n"
 
         self.base += "\n"
 
-    def set(self, comp, type, redirect = None):
+    def set(self, comp, type, redirect = None) -> None:
+        if comp not in TransformedComponent.SOURCE_COMPONENTS:
+            raise InvalidArgumentError("name", self.line_nr)
+
         if type == "variable":
             self.components[comp] = VariableComponent(comp)
         elif type == "static":
             self.components[comp] = StaticComponent(comp)
         elif type == "redirect":
             self.components[comp] = RedirectComponent(comp, self.components[redirect])
+        else:
+            raise InvalidArgumentError("type", self.line_nr)
 
-    def keys(self, keys, width, spacing, hitpos, lane, layout) -> None:
-        keys = int(keys)
-        width = int(width)
-        spacing = int(spacing)
-        hitpos = int(hitpos)
+    def keys(self, keys, width, spacing, hitpos, transparency, layout) -> None:
+        keys = self.int_arg("keys", keys)
+        width = self.int_arg("receptor width", width)
+        spacing = self.int_arg("spacing", spacing)
+        hitpos = self.int_arg("hit position", hitpos)
+        transparency = self.int_arg("transparency", transparency)
         colwidth = width + spacing
 
         config = f"[Mania]\nKeys: {keys}\n"
@@ -165,7 +198,7 @@ class ReceptorStyle:
         config += self.base
 
         for key in range(keys):
-            config += f"Colour{key+1}: 0,0,0,{lane}\n"
+            config += f"Colour{key+1}: 0,0,0,{transparency}\n"
 
             for _, component in self.components.items():
                 variant = component.variant(layout[key], width, spacing, hitpos)
@@ -177,14 +210,17 @@ class ReceptorStyle:
 
 
 def main():
-    get_ffmpeg()
-    ReceptorStyle()
-
-
-if __name__ == "__main__":
     try:
-        main()
+        get_ffmpeg()
+        ReceptorStyle()
+    except OsuReceptorError as err:
+        print(err.args[0])
     except Exception:
         traceback.print_exc()
         print("\nAn unexpected error has occured, please check your skin.txt file or report this error on my github.")
-        input("Press enter to exit.")
+    
+    input("Press enter to exit.")
+
+
+if __name__ == "__main__":
+    main()
