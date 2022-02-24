@@ -117,28 +117,28 @@ class ReceptorStyle:
         command, *args = line.lower().split()
         
         if command == "header":
-            self.add_header(fp, *args)
+            self.add_header(fp)
         elif command == "base":
-            self.add_base(fp)
+            self.add_base(fp, *args)
         elif command == "set":
             self.set(*args)
         elif command == "keys":
             self.keys(*args)
 
-    def add_header(self, fp, hide):
-        hide = int(hide)
-
+    def add_header(self, fp):
         while (line := fp.readline().strip()) != "header":
             self.skin += line + "\n"
 
-        if hide:
-            self.skin += f"Hit300g: {self.root}\\blank"
-
         self.skin += "\n"
             
-    def add_base(self, fp):
+    def add_base(self, fp, hide):
+        hide = int(hide)
+
         while (line := fp.readline().strip()) != "base":
             self.base += line + "\n"
+
+        if hide:
+            self.base += f"Hit300g: {self.root}\\blank"
 
         self.base += "\n"
 
