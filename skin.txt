@@ -11,10 +11,9 @@ header
 
 // This base is added to every mania key layout you create
 // It's basically a header for those layouts
-base
+base 1
 UpsideDown: 0
 KeysUnderNotes: 1
-Hit300g: blank
 JudgementLine: 0
 SpecialStyle: 0
 ColourBarline: 0,0,0,0

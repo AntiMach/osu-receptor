@@ -107,7 +107,7 @@ class ReceptorStyle:
             while (line := fp.readline()) != "":
                 self.process_command(fp, line)
 
-        with open("../skin.ini", "w") as fp:
+        with open("skin.ini", "w") as fp:
             fp.write(self.skin)
 
     def process_command(self, fp, line: str):
@@ -117,7 +117,7 @@ class ReceptorStyle:
         command, *args = line.lower().split()
         
         if command == "header":
-            self.add_header(fp)
+            self.add_header(fp, *args)
         elif command == "base":
             self.add_base(fp)
         elif command == "set":
@@ -125,9 +125,14 @@ class ReceptorStyle:
         elif command == "keys":
             self.keys(*args)
 
-    def add_header(self, fp):
+    def add_header(self, fp, hide):
+        hide = int(hide)
+
         while (line := fp.readline().strip()) != "header":
             self.skin += line + "\n"
+
+        if hide:
+            self.skin += f"Hit300g: {self.root}\\blank"
 
         self.skin += "\n"
             

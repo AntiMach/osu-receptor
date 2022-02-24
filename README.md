@@ -32,7 +32,27 @@ So what i did to fix it, which involved uniform square images for every componen
 ## And how do i do all of this?
 You could use some image editing software, or you can use my python script along with it's customizable skin properties text file to make your own skin.
 
-# Editing the skin.txt
+# Editing your skin
+Before anything, make sure to clone this repository into your skin folder, from where you should be working with.
+Your skin should look something like this:
+```
+SkinFolder/
+    mania/
+        .git/
+        src/
+            ...
+        .gitignore
+        README.md
+        blank.png
+        getffmpeg.py
+        osu!receptor.py
+        skin.txt
+    skin.ini
+    ...
+```
+Note: the `mania` folder can have any name.
+
+## skin.txt
 This is a sequence of commands for creating skin elements automatically, including scaling images and what not.
 
 ## The <b>skin.ini</b> header
@@ -46,12 +66,13 @@ header
 
 ## Generic mania skin settings
 ```
-base
+base [hide marvelous]
 ... skin.ini config stuff for mania key layouts...
 base
 ```
 - Will always add this bit of text at the beginning of each generated key layout.
 - Make sure to encase the entire base between those two base lines
+- If `[hide marvelous]` is `1`, it will hide the marvelous judgement when playing.
 
 ## Set component types
 `set [name] [type] <redirect>`
@@ -79,7 +100,7 @@ Each file should have the name:
 - `redirect` type components use an existing file as its own.
 
 ## Finishing the skin
-Finally, to create the <b>skin.ini</b> file that recognises the created files as part of the skin, all you have to do is run `osu!receptor.py` with python 3.9 or higher
+Finally, to create the <b>skin.ini</b> file that recognises the created files as part of the skin, all you have to do is run `osu!receptor.py` with python 3.9 or higher. But watch out, this will replace the old <b>skin.ini</b> in your skin with a new one based on your skin.txt settings!
 
 ## Cleaning up
 If you want to cleanup the skin's files for sharing, you can get rid of the following files/folders:
