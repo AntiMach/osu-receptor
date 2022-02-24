@@ -138,7 +138,7 @@ class ReceptorStyle:
             self.base += line + "\n"
 
         if hide:
-            self.base += f"Hit300g: {self.root}\\blank"
+            self.base += f"Hit300g: {self.root}\\blank\n"
 
         self.base += "\n"
 
