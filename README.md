@@ -106,6 +106,7 @@ Finally, to create the <b>skin.ini</b> file that recognises the created files as
 If you want to cleanup the skin's files for sharing, you can get rid of the following files/folders:
 ```
 src\
+    ...
 ffmpeg.exe
 README.md
 getffmpeg.py
