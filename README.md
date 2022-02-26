@@ -111,8 +111,8 @@ osu_receptor.bat
 However, doing this will get rid of every file needed to adjust the skin.
 Any other files were either generated or added by yourself, of which you can delete at your own discretion.
 
-## Using a pre-made skin
-If you just want to use a mania skin, you can just download them:
+## <a id="downloads"></a> Using a pre-made skin
+If you just want to use a mania skin, you can download them here:
 - [Circle Skin](https://github.com/AntiMach/osu-receptor/releases/tag/circles)
 - [Arrow Skin (pl0x&chordxx style)](https://github.com/AntiMach/osu-receptor/releases/tag/arrows)
 
