@@ -1,0 +1,33 @@
+// This is a comment, it doesn't get detected as a command
+
+// The settings define a few basic options to be used for every layout
+// Check the README.md for a detailed explanation of how this works
+settings yes yes 16:9 {
+    UpsideDown: 0
+    KeysUnderNotes: 1
+    ScorePosition: 120
+    ComboPosition: 160
+}
+
+// These define the type of images each component is made of
+// Check the README.md for a detailed explanation of how this works
+component note          variable
+component hold-head     static
+component hold-body     static
+component hold-tail     redirect hold-head
+component receptor-up   variable
+component receptor-down variable
+
+// These define the way each key layout is structured
+// It's not obligatory to have every single layout
+// Special key layouts are not implemented
+// Check the README.md for a detailed explanation of how this works
+keys 1 52 10 30 240 c
+keys 2 52 10 30 240 lr
+keys 3 52 10 30 240 lcr
+keys 4 52 10 30 240 ludr
+keys 5 52 10 30 240 lucdr
+keys 6 44 6 30 240 ldrldr
+keys 7 44 6 30 240 ldrcldr
+keys 8 44 6 30 240 ludrludr
+keys 9 44 6 30 240 ludrcludr

@@ -1,3 +1,7 @@
 __pycache__/
-ffmpeg*
-*@2x.png
+arrows/
+circles/
+skin.ini
+*mania*
+lighting*
+star2.png
