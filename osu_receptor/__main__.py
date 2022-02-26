@@ -25,14 +25,14 @@ def select(skins: list[str]):
 
 def main():
     skins = []
+    prefix = f"{SOURCE_PREFIX}-"
 
     for f in Path(".").iterdir():
-        prefix = f"{SOURCE_PREFIX}-"
         if f.is_dir() and f.stem.startswith(prefix):
             skins.append(f.with_stem(f.stem.removeprefix(prefix)))
 
     if len(skins) == 1:
-        selected = skins[0].stem.removeprefix()
+        selected = skins[0].stem.removeprefix(prefix)
     else:
         selected = select(skins)
 
