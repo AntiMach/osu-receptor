@@ -44,7 +44,6 @@ SkinFolder/
     src-[skinname]/
         skin.txt
         ...
-    blank.png
     osu_receptor.bat
     ...
 ```

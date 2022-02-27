@@ -31,7 +31,9 @@ def main():
         if f.is_dir() and f.stem.startswith(prefix):
             skins.append(f.with_stem(f.stem.removeprefix(prefix)))
 
-    if len(skins) == 1:
+    if len(skins) == 0:
+        raise OsuReceptorError("Found no skin folder...")
+    elif len(skins) == 1:
         selected = skins[0].stem.removeprefix(prefix)
     else:
         selected = select(skins)
@@ -40,6 +42,7 @@ def main():
         skin = OsuReceptorSkin(selected)
         skin.load_ini()
         skin.process()
+        skin.create_elements()
         skin.save_ini()
     except OsuReceptorError as err:
         print(err.args[0])

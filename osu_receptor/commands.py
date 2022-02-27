@@ -1,3 +1,4 @@
+from fileinput import lineno
 from io import TextIOWrapper
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -5,7 +6,7 @@ from pathlib import Path
 from .builders import BUILDERS
 from .errors import ArgumentCountError, BracketError, UnknownCommandError, ArgumentError
 from .components import Component, StaticComponent, VariableComponent, RedirectComponent
-from .consts import SOURCE_PREFIX, DEFAULT_BASE, INI, TXT, HEIGHT
+from .consts import BLANK, HIDDEN_ELEMENTS, SOURCE_PREFIX, DEFAULT_BASE, INI, TXT, HEIGHT
 
 
 class OsuReceptorSkin:
@@ -36,36 +37,36 @@ class OsuReceptorSkin:
         if not Path(INI).is_file():
             return
 
-        with open(INI, "r") as fp:
+        with open(INI, "r", encoding="utf-8") as fp:
             keys = None
             is_mania = False
             buffer = []
 
             for line in fp.readlines():
                 # Strip the line
-                line = line.strip()
+                stripped = line.strip()
 
                 # Reading mania section
-                if line.startswith("[Mania]"):
+                if stripped.startswith("[Mania]"):
                     is_mania = True
 
                 # Finished reading a mania section
-                elif line.startswith("[") and is_mania:
+                elif stripped.startswith("[") and is_mania:
                     self.mania[keys] = buffer
                     buffer = []
                     is_mania = False
                     keys = None
 
                 # On mania section, detect key count
-                if line.startswith("Keys:") and is_mania:
-                    keys = line.removeprefix("Keys:").strip()
+                if stripped.startswith("Keys:") and is_mania:
+                    keys = stripped.removeprefix("Keys:").strip()
 
                 # If on a mania section, append it to a buffer
                 # This buffer may be deleted if a layout for it is created
                 if is_mania:
-                    buffer.append(line + "\n")
+                    buffer.append(line)
                 else:
-                    self.content.append(line + "\n")
+                    self.content.append(line)
 
     def process(self) -> None:
         """
@@ -81,11 +82,16 @@ class OsuReceptorSkin:
                 self.line_nr += 1
                 self.process_command(fp, line.strip())
 
+    def create_elements(self) -> None:
+        for element in HIDDEN_ELEMENTS:
+            with open(element, "wb") as fp:
+                fp.write(BLANK)
+
     def save_ini(self) -> None:
         """
         Saves the ini file
         """
-        with open(INI, "w") as fp:
+        with open(INI, "w", encoding="utf-8") as fp:
             # Write the original ini content
             fp.writelines(self.content)
 
