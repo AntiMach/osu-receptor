@@ -87,6 +87,19 @@ settings [hide marvelous] [center] [screen ratio] {
 - `[transparency : 0-255]` : The transparency of each column.
 - NOTE: the values for the `receptor width` and `spacing` options should add up to a value between `0` and `100`
 
+## Hide osu skin elements
+`hide [element name] ...`
+- `[element name]`: The name of the osu skin element to hide.
+- `...`: You can hide as many elements as you feel like within the same command.
+- Note: this command <b>replaces</b> images with that same name and removes the HD variants of them.
+- The command can also be formatted like this, with as many elements as you want within each line:
+```
+hide {
+    [element name]
+    ...
+}
+```
+
 ## Src-skin file names
 Files in the `src-[skinname]` folder should have specific names, and should only include the needed images and `skin.txt` files.
 

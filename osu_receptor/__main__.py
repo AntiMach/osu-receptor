@@ -42,7 +42,6 @@ def main():
         skin = OsuReceptorSkin(selected)
         skin.load_ini()
         skin.process()
-        skin.create_elements()
         skin.save_ini()
     except OsuReceptorError as err:
         print(err.args[0])

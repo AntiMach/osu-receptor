@@ -6,7 +6,7 @@ from pathlib import Path
 from .builders import BUILDERS
 from .errors import ArgumentCountError, BracketError, UnknownCommandError, ArgumentError
 from .components import Component, StaticComponent, VariableComponent, RedirectComponent
-from .consts import BLANK, HIDDEN_ELEMENTS, SOURCE_PREFIX, DEFAULT_BASE, INI, TXT, HEIGHT
+from .consts import BLANK_NAME, BLANK_PNG, SOURCE_PREFIX, DEFAULT_BASE, INI, TXT, HEIGHT
 
 
 class OsuReceptorSkin:
@@ -28,6 +28,7 @@ class OsuReceptorSkin:
             SettingsCommand.NAME: SettingsCommand(self),
             ComponentCommand.NAME: ComponentCommand(self),
             KeysCommand.NAME: KeysCommand(self),
+            HideCommand.NAME: HideCommand(self),
         }
 
     def load_ini(self) -> None:
@@ -81,11 +82,6 @@ class OsuReceptorSkin:
             while (line := fp.readline()) != "":
                 self.line_nr += 1
                 self.process_command(fp, line.strip())
-
-    def create_elements(self) -> None:
-        for element in HIDDEN_ELEMENTS:
-            with open(element, "wb") as fp:
-                fp.write(BLANK)
 
     def save_ini(self) -> None:
         """
@@ -216,6 +212,9 @@ class SettingsCommand(Command, params=(3,)):
         if hide:
             self.skin.base.append(f"Hit300g: blank\n")
 
+            with open(BLANK_NAME, "wb") as fp:
+                fp.write(BLANK_PNG)
+
         try:
             left, right = ratio.split(":")
             self.skin.screen_ratio = float(left) / float(right)
@@ -298,3 +297,17 @@ class KeysCommand(Command, params=(6,6)):
             config.append("\n")
 
         self.skin.mania[keys] = config
+
+class HideCommand(Command, params=(1,)):
+    NAME = "hide"
+    ARG_NAME = "element name"
+
+    def run(self, *names: str) -> None:
+        for name in names:
+            if name.endswith(".png"):
+                name = name.removesuffix(".png")
+
+            with open(f"{name}.png", "wb") as fp:
+                fp.write(BLANK_PNG)
+            
+            Path(f"{name}@2x.png").unlink(True)
