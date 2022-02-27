@@ -1,0 +1,48 @@
+// This is a comment, it doesn't get detected as a command
+
+// The settings define a few basic options to be used for every layout
+// Check the README.md for a detailed explanation of this command
+settings yes yes 16:9 {
+    UpsideDown: 0
+    KeysUnderNotes: 1
+    ScorePosition: 120
+    ComboPosition: 160
+}
+
+// These define the type of images each component is made of
+// Check the README.md for a detailed explanation of this command
+component note          static
+component hold-head     redirect note
+component hold-body     static
+component hold-tail     redirect note
+component receptor-up   static
+component receptor-down static
+
+// These define the way each key layout is structured
+// It's not obligatory to have every single layout
+// Special key layouts are not implemented
+// Check the README.md for a detailed explanation of this command
+keys 1 48 14 30 240 1
+keys 2 48 14 30 240 11
+keys 3 48 14 30 240 111
+keys 4 48 14 30 240 1111
+keys 5 48 14 30 240 11111
+keys 6 40 10 30 240 111111
+keys 7 40 10 30 240 1111111
+keys 8 40 10 30 240 11111111
+keys 9 40 10 30 240 111111111
+
+// This will create blank images for each of these elements
+// Can be used single line, but I kept it multiline for a more clearer view
+// Check the README.md for a detailed explanation of this command
+hide {
+    lighting
+    lightingL
+    lightingN
+    mania-stage-hint
+    mania-stage-light
+    mania-stage-left
+    mania-stage-right
+    comboburst-mania
+    star2
+}
