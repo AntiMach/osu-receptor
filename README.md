@@ -1,5 +1,6 @@
 # Solving osu!mania streching skin issues
 Skip [here](#skip) to learn how to actually use this.
+Skip [here](#downloads) if you just want some skin.
 
 ## What I figured out
 Everything in game is based on the height of 480px, and sizing some elements is based on a ratio of 1.6.
@@ -30,25 +31,25 @@ So what I did to fix it, which involved uniform square images for every componen
 - `(480 * ScreenRatio - ColumnWidth * Keys) / 2`.
 - This will perfectly center the note field.
 
-## And how can I do all of this?
-You could use some image editing software, or you can use my python script along with it's customizable skin properties text file to make your own skin.
+## And how can I do any of this?
+You could use some image editing software, or you can use my python script along with it's customizable skin properties text file to make your own noteskin.
 
-# <a id="skip"></a> Editing your skin
+# <a id="skip"></a> Editing your noteskin
 Before anything, make sure to clone this repository as your skin folder, from where you should be working with.
 The repository itself works as a skin, but its files can be easily placed inside any other osu skin.
-Your skin should have these files and folders:
+Your osu skin should have these files and folders:
 ```
 SkinFolder/
     osu_receptor/
         ...
-    src-[skinname]/
+    src-[noteskin]/
         skin.txt
         ...
     osu_receptor.bat
     ...
 ```
 These files and folders are important, the rest is added by the script or by yourself.
-`[skinname]` is the name of you osu!receptor noteskin.
+`[noteskin]` is the name of you osu!receptor noteskin.
 
 ## The skin.ini
 The good old `skin.ini` can be created here for non `[Mania]` section settings. Any of those will be replaced by the generated key layouts from the program.
@@ -56,18 +57,30 @@ The good old `skin.ini` can be created here for non `[Mania]` section settings. 
 ## The skin.txt
 This is a sequence of commands for creating skin elements automatically, including scaling images and defining some skin properties.
 
-## Notefield settings
+## General syntax
+Every line is considered a `command`, except empty lines, and anything after a double forward slash (`//`) is ignored, and is therefore considered a comment.
+
+## Arguments
+Arguments are pieces of text separated by spaces, or by lines if between curly braces (`{ }`), and have the following types:
+- `[required argument]`: This is a required argument, you must fill it out for the command to work.
+- `<optional argument>`: This is an optional argument, you're not obliged to fill it for the command to work.
+- `*<argument list>`: This is an argument list, can be any number of arguments.
+
+You can also make use of multiline arguments, which separate arguments by lines, if you write a command like this:
 ```
-settings [hide marvelous] [center] [screen ratio] {
-    ...
-    extra config lines
-    ...
+command *<inline arguments> {
+    *<multiline arguments>
 }
 ```
-- `[hidden marvelous : yes/no]`: If the marvelous judgement should be hidden.
+Each argument can now contain spaces, and is useful for clearer use of commands.
+
+# Commands
+
+## Notefield settings
+`settings [center] [screen ratio] *<extra ini options>`
 - `[center : yes/no]`: If the note field should be centered or not.
 - `[screen ratio : expr]`: An expression representing the screen ratio you're playing at. Usual value is `16:9`.
-- `<extra config lines : text>`: Optional. Any extra config lines you consider necessary to add to every generated key layout.
+- `*<extra ini options : text>`: Optional. Any extra config lines you consider necessary to add to every generated key layout. Any osu element that is replaced by `blank` is hidden in game.
 
 ## Set component types
 `component [name] [type] [redirect]`
@@ -87,19 +100,6 @@ settings [hide marvelous] [center] [screen ratio] {
 - `[transparency : 0-255]` : The transparency of each column.
 - NOTE: the values for the `receptor width` and `spacing` options should add up to a value between `0` and `100`
 
-## Hide osu skin elements
-`hide [element name] ...`
-- `[element name]`: The name of the osu skin element to hide.
-- `...`: You can hide as many elements as you feel like within the same command.
-- Note: this command <b>replaces</b> images with that same name and removes the HD variants of them.
-- The command can also be formatted like this, with as many elements as you want within each line:
-```
-hide {
-    [element name]
-    ...
-}
-```
-
 ## Src-skin file names
 Files in the `src-[skinname]` folder should have specific names, and should only include the needed images and `skin.txt` files.
 
@@ -109,7 +109,7 @@ Each image should be named:
 - `redirect` type components use an existing file as its own.
 
 ## Finishing the skin
-Finally, to edit the `skin.ini` file that recognises the created files as part of the skin, all you have to do is run `osu_receptor.bat` with python 3.9 or higher installed. But watch out, this will edit the current `skin.ini` in your skin and may delete previous `[Mania]` settings. Anything that isn't a `[Mania]` section should stay the same, but if you're scared of loosing any settings, <b>please make a backup of your `skin.ini`</b>.
+Finally, to edit the `skin.ini` file that recognises the created files as part of the skin, all you have to do is run `osu_receptor.bat` with python 3.9 or higher installed. But watch out, this will edit the current `skin.ini` in your skin and may delete previous `[Mania]` settings. Anything that isn't a `[Mania]` section should stay the same, but if you're scared of losing any settings, <b>please make a backup of your `skin.ini`</b>.
 
 ## Cleaning up
 If you want to cleanup the skin's files for sharing, you can get rid of the following files/folders:

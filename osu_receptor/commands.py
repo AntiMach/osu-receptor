@@ -28,7 +28,6 @@ class OsuReceptorSkin:
             SettingsCommand.NAME: SettingsCommand(self),
             ComponentCommand.NAME: ComponentCommand(self),
             KeysCommand.NAME: KeysCommand(self),
-            HideCommand.NAME: HideCommand(self),
         }
 
     def load_ini(self) -> None:
@@ -75,33 +74,33 @@ class OsuReceptorSkin:
         """
         Path(self.name).mkdir(exist_ok=True)
 
+        with open(BLANK_NAME, "wb") as fp:
+            fp.write(BLANK_PNG)
+
         with open(f"{self.src}/{TXT}", "r") as fp:
             self.line_nr = 0
 
             # Read each line until no more content is read
             while (line := fp.readline()) != "":
                 self.line_nr += 1
-                self.process_command(fp, line.strip())
+                self.process_line(fp, line)
 
-    def save_ini(self) -> None:
+    def strip_comments(self, line: str) -> str:
         """
-        Saves the ini file
+        Strips comments from a line
         """
-        with open(INI, "w", encoding="utf-8") as fp:
-            # Write the original ini content
-            fp.writelines(self.content)
+        line, *_ = *line.split("//"), ""
+        del _
+        return line
 
-            # Write each mania layout
-            for content in self.mania.values():
-                fp.writelines(content)
-
-    def process_command(self, fp: TextIOWrapper, line: str) -> None:
+    def process_line(self, fp: TextIOWrapper, line: str) -> None:
         """
         Processes an individual command
         """
-        # Skip comments and empty lines
-        # Inline comments do not work
-        if line == "" or line.startswith("//"):
+        line = self.strip_comments(line)
+
+        # Skip empty lines
+        if line.strip() == "":
             return
 
         # Split commands and arguments
@@ -109,11 +108,16 @@ class OsuReceptorSkin:
 
         lines = 0
 
-        if args[-1] == "{":
+        if len(args) > 0 and args[-1] == "{":
             args.pop()
 
-            while (line := fp.readline()).strip() != "}" or line == "":
-                args.append(line.strip())
+            while (line := fp.readline()) != "":
+                line = self.strip_comments(line).strip()
+
+                if line == "}":
+                    break
+
+                args.append(line)
                 lines += 1
 
             lines += 1
@@ -127,9 +131,22 @@ class OsuReceptorSkin:
             command.run(*args)
 
             self.line_nr += lines
+
         else:
             # Command doesn't exist
             raise UnknownCommandError(command, self.line_nr)
+
+    def save_ini(self) -> None:
+        """
+        Saves the ini file
+        """
+        with open(INI, "w", encoding="utf-8") as fp:
+            # Write the original ini content
+            fp.writelines(self.content)
+
+            # Write each mania layout
+            for content in self.mania.values():
+                fp.writelines(content)
 
 
 class Command(ABC):
@@ -199,25 +216,18 @@ class Command(ABC):
         return NotImplemented
 
 
-class SettingsCommand(Command, params=(3,)):
+class SettingsCommand(Command, params=(2,)):
     NAME = "settings"
-    ARG_HIDE = "hide marvelous"
     ARG_CENTER = "center notefield"
     ARG_RATIO = "screen ratio"
 
-    def run(self, hide, center, ratio, *lines) -> None:
-        hide = self.bool_arg(self.ARG_HIDE, hide)
+    def run(self, center, ratio, *lines) -> None:
         self.skin.center = self.bool_arg(self.ARG_CENTER, center)
-        
-        if hide:
-            self.skin.base.append(f"Hit300g: blank\n")
-
-            with open(BLANK_NAME, "wb") as fp:
-                fp.write(BLANK_PNG)
 
         try:
             left, right = ratio.split(":")
             self.skin.screen_ratio = float(left) / float(right)
+
         except ValueError:
             raise ArgumentError(self.ARG_RATIO, self.skin.line_nr)
 
@@ -227,7 +237,7 @@ class SettingsCommand(Command, params=(3,)):
 
 class ComponentCommand(Command, params=(2, 3)):
     NAME = "component"
-    ARG_CENTER = "name"
+    ARG_NAME = "name"
     ARG_TYPE = "type"
     ARG_REDIRECT = "redirect"
     T_VARIABLE = "variable"
@@ -297,17 +307,3 @@ class KeysCommand(Command, params=(6,6)):
             config.append("\n")
 
         self.skin.mania[keys] = config
-
-class HideCommand(Command, params=(1,)):
-    NAME = "hide"
-    ARG_NAME = "element name"
-
-    def run(self, *names: str) -> None:
-        for name in names:
-            if name.endswith(".png"):
-                name = name.removesuffix(".png")
-
-            with open(f"{name}.png", "wb") as fp:
-                fp.write(BLANK_PNG)
-            
-            Path(f"{name}@2x.png").unlink(True)
