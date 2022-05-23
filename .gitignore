@@ -1,7 +1,11 @@
 __pycache__/
+dist/
+build/
 arrows*/
 circles*/
 skin.ini
 blank.png
 comboburst-mania.png
 star2.png
+osu_receptor.exe
+osu_receptor.spec

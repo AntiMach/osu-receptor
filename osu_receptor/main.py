@@ -48,6 +48,3 @@ def main():
     except Exception:
         traceback.print_exc()
         print("\nAn unexpected error has occured, please report this error on my github.")
-
-
-main()
